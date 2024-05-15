@@ -1,0 +1,24 @@
+import { collection, getDocs, getFirestore } from "firebase/firestore";
+import app from './init';
+import { getDoc, doc } from "firebase/firestore";
+
+const firestore = getFirestore(app);
+
+//mengambil banyak data
+export async function retrieveData(collectionName: string) {
+    const snapshot = await getDocs(collection(firestore,collectionName));
+
+    const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+    }));
+
+    return data;
+}
+
+//mengambil satu data
+export async function retrieveDataById(collectionName: string, id: string) {
+    const snapshot = await getDoc(doc(firestore,collectionName,id));
+    const data = snapshot.data();
+    return data;
+}
